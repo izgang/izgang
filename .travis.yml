@@ -1,0 +1,31 @@
+language: python
+python:
+- '2.7'
+branches:
+  only:
+  - master
+addons:
+  apt:
+    packages:
+    - language-pack-zh-hant
+install:
+- pip install -r requirements.txt
+- make download
+script:
+- make publish
+after_success:
+- git config --global user.email "travis@travis-ci.org"
+- git config --global user.name "Travis"
+- git config --global push.default simple
+- echo "Clone izgang.github.io..."
+- git clone --depth 1 https://${GH_TOKEN}@github.com/izgang/izgang.github.io.git > /dev/null
+- cd izgang.github.io
+- git rm -rf * > /dev/null
+- cp -r  ../output/* .
+- git add .
+- git status
+- git commit -m "Pushed by Travis CI"
+- git push --quiet
+env:
+  global:
+    secure: wLdPclbJSuj0TZpQtkMezbLfjxfCKcuwYOmP4zSDvVaqv/xEzxZUSjHYjtOJd5pe9zT2Xq5AGM/fWdrzFN2TUdLlM/nB9qpY+7XljDY4BASSm4YJwetxwzAKcqssxkWEIHo22k5Er1/tKSOHeRfvgfWTHdRzJHCSqcFDFK2XpkbtQ0JdAiXpMLN7JKn5YUVRZ6/jpjp+w86bLZGrLGEkCVChwxlARL13Ac/4gBoCD4bHYlFW2wNbbcuPTGwAIpkfFcU7215mWrmpj0a1M1Tozelen0EbRRXDWXCh+4K60gaCQXlgpwILJSxCETcV2ZpJArlDtOdTiGUGqztgPtqbrDDePqwFh32IQ9H1AMyI14hOHSHo4Da1Vzmj/fCW4rpZE55hFxOC44ODmpRxZVS92tUUmrYSdAC2PZbv39qkdNuLb0kniPYxhipe1eqIxl05wy0giNhFRIlwjlJrJ5J61MPAN6zkjL9Ac9vhvn0gVW19wN34t+Iz2av06GqzzLUhzTQjiUastlF0W8elkuqc9q4xuNml8Qnk3mONt3sDyMu9f8JjyKYoWm8dJaXNJSQidip+xVn6k4z0gq3WV7MLNI45nOBfB6AeaBTcjkKghettDQpg7++ZMmhD1uwanUpGd/5zbXomhmzQPTIBAo3t6iCGIUtCgp4TUVOzzGqMb8c=

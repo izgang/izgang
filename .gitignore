@@ -1,0 +1,5 @@
+cache
+output
+*.pyc
+theme/static/css/style.css
+theme/styling/_normalize302.scss
