@@ -6,7 +6,19 @@ from bs4 import BeautifulSoup
 import json
 from datetime import datetime
 
-def parsePost(path):
+def saveAsRst(dt, title, category, content, rstpath):
+    with open(rstpath, 'w') as fo:
+        fo.write("#######################################################\n")
+        fo.write(title.encode("utf-8"))
+        fo.write("\n#######################################################\n\n")
+        fo.write(":date: " + dt.isoformat()[:-3] + "+08:00\n")
+        fo.write(":tags: \n")
+        fo.write(":category: " + category.encode("utf-8") + "\n")
+        fo.write(":summary: \n\n\n")
+
+
+
+def parsePost(path, rstpath):
     with open(path, 'r') as f:
         soup = BeautifulSoup(f)
         article = soup.find(id="article-box")
@@ -24,20 +36,22 @@ def parsePost(path):
         #print(tstr)
         # http://stackoverflow.com/questions/13182075/how-to-convert-a-timezone-aware-string-to-datetime-in-python-without-dateutil
         dt = datetime.strptime(tstr, "%b %d %Y %H:%M")
-        print(dt.isoformat())
+        #print(dt.isoformat())
 
         # parse title
         title = article.find("li", class_="title").find("a").string.strip()
-        print(title)
+        #print(title)
 
         # parse category
         category = soup.find("ul", class_="refer").find_all("li")[1].find("a").string.strip()
-        print(category)
+        #print(category)
 
         # parse content
         content = soup.find("div", class_="article-content-inner")
-        print(content)
+        #print(content)
+
+        saveAsRst(dt, title, category, content, rstpath)
 
 
 if __name__ == '__main__':
-  parsePost("42830221")
+  parsePost("42830221", "test%zh.rst")
