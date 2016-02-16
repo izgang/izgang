@@ -96,4 +96,5 @@ def allHTMLPosts2rst(username):
 
 
 if __name__ == '__main__':
-    allHTMLPosts2rst("nanomi")
+    #allHTMLPosts2rst("nanomi")
+    allHTMLPosts2rst("daiqi007")

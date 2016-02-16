@@ -52,10 +52,14 @@ def getListallsHTML(username):
     with open(localPath, "r") as f:
         soup = BeautifulSoup(f)
         listalls = soup.find("div", class_="page").find_all("a")
-        for listall in listalls:
-            href = listall.get("href")
-            lp = os.path.join(listallDir, os.path.basename(href)) + ".html"
-            fetchHTML(href, lp)
+        last = listalls[-2]
+        lastPageNumber = int(last.string.strip())
+
+        for i in range(lastPageNumber):
+            targetUrl = "http://%s.pixnet.net/blog/listall/%d" % (username, i+1)
+            #print(targetUrl)
+            lp = os.path.join(listallDir, os.path.basename(targetUrl)) + ".html"
+            fetchHTML(targetUrl, lp)
 
 
 def getAllPostsUrl(username):
@@ -78,4 +82,5 @@ def getAllPostsUrl(username):
 
 
 if __name__ == '__main__':
-    getAllPostsUrl("nanomi")
+    #getAllPostsUrl("nanomi")
+    getAllPostsUrl("daiqi007")
