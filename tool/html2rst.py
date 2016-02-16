@@ -3,6 +3,7 @@
 
 # http://www.crummy.com/software/BeautifulSoup/bs4/doc/
 from bs4 import BeautifulSoup
+from bs4 import Tag
 import json
 from datetime import datetime
 
@@ -15,7 +16,16 @@ def saveAsRst(dt, title, category, content, rstpath):
         fo.write(":tags: \n")
         fo.write(":category: " + category.encode("utf-8") + "\n")
         fo.write(":summary: \n\n\n")
-
+        fo.write(":: \n\n")
+        for child in content.children:
+            if isinstance(child, Tag):
+                if child.name == "br":
+                    fo.write("\n")
+            else:
+                # http://stackoverflow.com/questions/11755208/how-to-remove-m-from-a-text-file-and-replace-it-with-the-next-line
+                line = child.strip()
+                if len(line) > 0:
+                    fo.write("  " + line.encode("utf-8") + "\n")
 
 
 def parsePost(path, rstpath):
