@@ -3,7 +3,7 @@
 
 :date: 2010-01-01T22:12+08:00
 :tags: 
-:category: 
+:category: None
 :summary: 
 
 

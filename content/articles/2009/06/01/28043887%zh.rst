@@ -3,7 +3,7 @@ Napoleon[拿破崙]思考法   吳牧寰 (gho bhok huan)
 
 :date: 2009-06-01T08:39+08:00
 :tags: 
-:category: 
+:category: None
 :summary: 
 
 

@@ -3,7 +3,7 @@
 
 :date: 2009-06-19T07:36+08:00
 :tags: 
-:category: 
+:category: None
 :summary: 
 
 

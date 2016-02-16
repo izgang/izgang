@@ -72,7 +72,7 @@ def parsePost(path):
         # parse category
         link = soup.find("ul", class_="refer").find_all("li")[1].find("a")
         if link.get("rel"):
-            category = ""
+            category = "None"
         else:
             category = link.string.strip()
         #print(category)

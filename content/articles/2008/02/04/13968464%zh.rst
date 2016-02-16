@@ -3,7 +3,7 @@
 
 :date: 2008-02-04T18:30+08:00
 :tags: 
-:category: 
+:category: None
 :summary: 
 
 
