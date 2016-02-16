@@ -3,7 +3,7 @@
 
 :date: 2007-10-17T18:54+08:00
 :tags: 
-:category: 科技台文之5 Hubble太空望遠鏡（HST，Hubble Space Telescope） 楊健 清華大學物理系/統計所
+:category: 
 :summary: 
 
 
