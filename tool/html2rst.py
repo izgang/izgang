@@ -10,11 +10,15 @@ import os
 from allPostsUrls import fetchHTML, mkdirp
 
 
-def saveAsRst(dt, title, category, content, rstpath):
+def saveAsRst(dt, title, category, content, oriUrl, rstpath):
     with open(rstpath, 'w') as fo:
-        fo.write("#######################################################\n")
         fo.write(title.encode("utf-8"))
-        fo.write("\n#######################################################\n\n")
+        fo.write("\n")
+        # https://www.google.com/search?q=python+unicode+length+in+bytes
+        # http://stackoverflow.com/questions/6714826/how-can-i-determine-the-byte-length-of-a-utf-8-encoded-string-in-python
+        for i in range(len(title.encode("utf-8"))):
+            fo.write("#")
+        fo.write("\n\n")
         fo.write(":date: " + dt.isoformat()[:-3] + "+08:00\n")
         fo.write(":tags: \n")
         fo.write(":category: " + category.encode("utf-8") + "\n")
@@ -30,8 +34,10 @@ def saveAsRst(dt, title, category, content, rstpath):
                 if len(line) > 0:
                     fo.write("  " + line.encode("utf-8") + "\n")
 
+        fo.write("\n\n`Original Post on Pixnet <%s>`_" % oriUrl)
 
-def parsePost(path, rstpath):
+
+def parsePost(path):
     with open(path, 'r') as f:
         soup = BeautifulSoup(f)
         article = soup.find(id="article-box")
@@ -43,6 +49,8 @@ def parsePost(path, rstpath):
         day = article.find("span", class_="date").string.strip()
         year = article.find("span", class_="year").string.strip()
         hm = article.find("span", class_="time").string.strip()
+        # https://www.google.com/search?q=python+datetime+from+string
+        # https://www.google.com/search?q=python+datetime+from+string+with+timezone
         # http://stackoverflow.com/questions/466345/converting-string-into-datetime
         # https://en.wikipedia.org/wiki/List_of_time_zone_abbreviations
         tstr = month + " " + day + " " + year + " " + hm
@@ -63,7 +71,7 @@ def parsePost(path, rstpath):
         content = soup.find("div", class_="article-content-inner")
         #print(content)
 
-        saveAsRst(dt, title, category, content, rstpath)
+        return dt, title, category, content
 
 
 def allHTMLPosts2rst(username):
@@ -78,6 +86,13 @@ def allHTMLPosts2rst(username):
     for url in urls:
         localPath = os.path.join(postsDir, os.path.basename(url)) + ".html"
         fetchHTML(url, localPath)
+
+        dt, title, category, content = parsePost(localPath)
+        dstDir = "../content/articles/%d/%02d/%02d/" % (dt.year, dt.month, dt.day)
+        mkdirp(dstDir)
+        dstPath = os.path.join(dstDir, os.path.basename(url)) + "%zh.rst"
+        print("writing " + dstPath + " ...")
+        saveAsRst(dt, title, category, content, url, dstPath)
 
 
 if __name__ == '__main__':
