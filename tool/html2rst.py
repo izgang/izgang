@@ -10,6 +10,20 @@ import os
 from allPostsUrls import fetchHTML, mkdirp
 
 
+def writeContentToFile(content, fo):
+    for child in content.children:
+        if isinstance(child, Tag):
+            if child.name == "br":
+                fo.write("\n")
+            else:
+                writeContentToFile(child, fo)
+        else:
+            # http://stackoverflow.com/questions/11755208/how-to-remove-m-from-a-text-file-and-replace-it-with-the-next-line
+            line = child.strip()
+            if len(line) > 0:
+                fo.write("  " + line.encode("utf-8") + "\n")
+
+
 def saveAsRst(dt, title, category, content, oriUrl, rstpath):
     with open(rstpath, 'w') as fo:
         fo.write(title.encode("utf-8"))
@@ -24,15 +38,7 @@ def saveAsRst(dt, title, category, content, oriUrl, rstpath):
         fo.write(":category: " + category.encode("utf-8") + "\n")
         fo.write(":summary: \n\n\n")
         fo.write(":: \n\n")
-        for child in content.children:
-            if isinstance(child, Tag):
-                if child.name == "br":
-                    fo.write("\n")
-            else:
-                # http://stackoverflow.com/questions/11755208/how-to-remove-m-from-a-text-file-and-replace-it-with-the-next-line
-                line = child.strip()
-                if len(line) > 0:
-                    fo.write("  " + line.encode("utf-8") + "\n")
+        writeContentToFile(content, fo)
 
         fo.write("\n\n`Original Post on Pixnet <%s>`_" % oriUrl)
 
@@ -100,5 +106,5 @@ def allHTMLPosts2rst(username):
 
 
 if __name__ == '__main__':
-    #allHTMLPosts2rst("nanomi")
+    allHTMLPosts2rst("nanomi")
     allHTMLPosts2rst("daiqi007")
