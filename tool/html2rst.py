@@ -6,6 +6,9 @@ from bs4 import BeautifulSoup
 from bs4 import Tag
 import json
 from datetime import datetime
+import os
+from allPostsUrls import fetchHTML, mkdirp
+
 
 def saveAsRst(dt, title, category, content, rstpath):
     with open(rstpath, 'w') as fo:
@@ -63,5 +66,19 @@ def parsePost(path, rstpath):
         saveAsRst(dt, title, category, content, rstpath)
 
 
+def allHTMLPosts2rst(username):
+    # retrieve urls of all posts in json
+    jsonPath = os.path.join(username, "urls.json")
+    with open(jsonPath, "r") as f:
+        urls = json.load(f)
+
+    postsDir = os.path.join(username, "posts")
+    mkdirp(postsDir)
+
+    for url in urls:
+        localPath = os.path.join(postsDir, os.path.basename(url)) + ".html"
+        fetchHTML(url, localPath)
+
+
 if __name__ == '__main__':
-  parsePost("42830221", "test%zh.rst")
+    allHTMLPosts2rst("nanomi")

@@ -8,6 +8,13 @@ import urllib2
 import os
 
 
+def mkdirp(dirpath):
+    # https://www.google.com/search?q=python+mkdir+p
+    # http://stackoverflow.com/questions/600268/mkdir-p-functionality-in-python
+    if not os.path.exists(dirpath):
+        os.makedirs(dirpath)
+
+
 def parseListallHTML(path):
     urls = []
     with open(path, 'r') as f:
@@ -35,10 +42,7 @@ def getListallsHTML(username):
     #print(baseurl)
 
     listallDir = os.path.join(username, "listall")
-    # https://www.google.com/search?q=python+mkdir+p
-    # http://stackoverflow.com/questions/600268/mkdir-p-functionality-in-python
-    if not os.path.exists(listallDir):
-        os.makedirs(listallDir)
+    mkdirp(listallDir)
 
     localPath = os.path.join(listallDir, os.path.basename(baseurl)) + ".html"
     #print(localPath)
